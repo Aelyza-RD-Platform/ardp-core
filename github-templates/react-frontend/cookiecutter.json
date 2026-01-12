@@ -1,0 +1,14 @@
+{
+  "project_name": "my-react-frontend",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "description": "React Frontend for Aelyza Technology projects",
+  "node_version": "20",
+  "use_typescript": "y",
+  "use_tailwind": "y",
+  "author_name": "Aelyza Technology",
+  "author_email": "infrastructure@aelyza.com",
+  "company": "Aelyza Technology",
+  "aws_account_id": "886220647138",
+  "aws_region": "eu-central-1",
+  "port": "3000"
+}

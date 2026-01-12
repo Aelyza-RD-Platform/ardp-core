@@ -1,0 +1,14 @@
+{
+  "project_name": "my-mcp-server",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "server_name": "{{ cookiecutter.project_slug.replace('-', '_') }}",
+  "description": "MCP Server for Aelyza Technology projects",
+  "python_version": "3.11",
+  "use_postgres": "y",
+  "use_redis": "y",
+  "author_name": "Aelyza Technology",
+  "author_email": "infrastructure@aelyza.com",
+  "company": "Aelyza Technology",
+  "aws_account_id": "886220647138",
+  "aws_region": "eu-central-1"
+}

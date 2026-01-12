@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir poetry==1.7.1 && \
 
 # Dépendances MCP communes pour tous les serveurs
 RUN pip install --no-cache-dir \
-    mcp==0.9.0 \
+    mcp==0.9.1 \
     fastapi==0.104.1 \
     uvicorn[standard]==0.24.0 \
     pydantic==2.5.0 \

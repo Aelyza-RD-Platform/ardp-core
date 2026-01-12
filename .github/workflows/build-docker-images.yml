@@ -22,7 +22,6 @@ on:
 env:
   AWS_REGION: eu-central-1
   AWS_ACCOUNT_ID: 886220647138
-  ECR_REGISTRY: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
 jobs:
   build-python-mcp:

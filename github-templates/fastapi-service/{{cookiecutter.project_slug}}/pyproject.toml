@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "{{ cookiecutter.project_slug }}"
+version = "0.1.0"
+description = "{{ cookiecutter.description }}"
+authors = ["{{ cookiecutter.author_name }} <{{ cookiecutter.author_email }}>"]
+readme = "README.md"
+packages = [{include = "{{ cookiecutter.service_name }}", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^{{ cookiecutter.python_version }}"
+fastapi = "^0.104.1"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+pydantic = "^2.5.0"
+
+{% if cookiecutter.use_postgres == "y" %}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.23"}
+asyncpg = "^0.29.0"
+{% endif %}
+
+{% if cookiecutter.use_redis == "y" %}
+redis = {extras = ["hiredis"], version = "^5.0.1"}
+{% endif %}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+httpx = "^0.25.0"
+black = "^23.9.0"
+ruff = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py{{ cookiecutter.python_version }}']
+
+[tool.ruff]
+line-length = 88
+target-version = "py{{ cookiecutter.python_version }}"

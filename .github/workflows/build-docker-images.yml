@@ -1,0 +1,134 @@
+name: Build and Push Docker Base Images
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docker-base-images/**'
+      - '.github/workflows/build-docker-images.yml'
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Image to build (python-mcp, python-fastapi, node-react, or all)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - python-mcp
+          - python-fastapi
+          - node-react
+
+env:
+  AWS_REGION: eu-central-1
+  AWS_ACCOUNT_ID: 886220647138
+  ECR_REGISTRY: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+
+jobs:
+  build-python-mcp:
+    if: github.event.inputs.image == 'all' || github.event.inputs.image == 'python-mcp' || github.event.inputs.image == ''
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build and push python-mcp
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_NAME: ardp-python-mcp
+        IMAGE_TAG: 3.11-latest
+      run: |
+        docker buildx build \
+          --platform linux/amd64 \
+          --tag $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+          --tag $ECR_REGISTRY/$IMAGE_NAME:3.11-$(date +%Y%m%d) \
+          --push \
+          docker-base-images/python-mcp/
+
+  build-python-fastapi:
+    if: github.event.inputs.image == 'all' || github.event.inputs.image == 'python-fastapi' || github.event.inputs.image == ''
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build and push python-fastapi
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_NAME: ardp-python-fastapi
+        IMAGE_TAG: 3.11-latest
+      run: |
+        docker buildx build \
+          --platform linux/amd64 \
+          --tag $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+          --tag $ECR_REGISTRY/$IMAGE_NAME:3.11-$(date +%Y%m%d) \
+          --push \
+          docker-base-images/python-fastapi/
+
+  build-node-react:
+    if: github.event.inputs.image == 'all' || github.event.inputs.image == 'node-react' || github.event.inputs.image == ''
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build and push node-react
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_NAME: ardp-node-react
+        IMAGE_TAG: 20-latest
+      run: |
+        docker buildx build \
+          --platform linux/amd64 \
+          --tag $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+          --tag $ECR_REGISTRY/$IMAGE_NAME:20-$(date +%Y%m%d) \
+          --push \
+          docker-base-images/node-react/

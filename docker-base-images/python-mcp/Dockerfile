@@ -27,15 +27,17 @@ RUN pip install --no-cache-dir poetry==1.7.1 && \
     poetry config virtualenvs.create false
 
 # Dépendances MCP communes pour tous les serveurs
+# Note: Utiliser fastapi>=0.115.0 pour compatibilité avec mcp et anyio>=4.6
 RUN pip install --no-cache-dir \
     mcp==0.9.1 \
-    fastapi==0.104.1 \
-    uvicorn[standard]==0.24.0 \
-    pydantic==2.5.0 \
-    pydantic-settings==2.1.0 \
+    fastapi==0.115.0 \
+    uvicorn[standard]==0.32.0 \
+    pydantic==2.9.0 \
+    pydantic-settings==2.5.0 \
+    anyio>=4.6.0 \
     asyncpg==0.29.0 \
     redis[hiredis]==5.0.1 \
-    httpx==0.25.2 \
+    httpx==0.27.0 \
     python-dotenv==1.0.0
 
 # Créer le répertoire de travail
